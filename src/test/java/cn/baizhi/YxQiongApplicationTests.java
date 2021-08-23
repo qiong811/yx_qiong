@@ -12,6 +12,7 @@ class YxQiongApplicationTests {
     @Test
     void contextLoads() {
         System.out.println(adminDao.queryByUsername("gj"));
+        System.out.println(adminDao.queryByUsername("1"));
     }
 
 }
