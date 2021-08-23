@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.baizhi.dao.UserDao">
+    <!--<resultMap id="mon" type="cn.baizhi.vo.MonthAndSex">-->
+        <!--<result property="" column=""></result>-->
+    <!--</resultMap>-->
+    <sql id="all">
+        select id,username,phone,headimg,brief,wechat,createdate,status,sex from yx_user
+    </sql>
+    <select id="queryRange" resultType="User">
+        <include refid="all"/>limit #{start},#{size}
+    </select>
+    <select id="queryCount" resultType="Integer">
+        select count(*) from yx_user
+    </select>
+    <!--void update(User user);-->
+    <update id="update" parameterType="User">
+        update yx_user
+        <!--<trim prefix="set" suffixOverrides=",">-->
+            <!--<if test="username!=null and username!=''">-->
+                <!--username=#{username,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="phone!=null and phone!=''">-->
+                <!--phone=#{phone,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="headimg!=null and headimg!=''">-->
+                <!--headimg=#{headimg,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="brief!=null and brief!=''">-->
+                <!--brief=#{brief,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="wechat!=null and wechat!=''">-->
+                <!--wechat=#{wechat,jdbcType=VARCHAR},-->
+            <!--</if>-->
+            <!--<if test="status!=null and status!=''">-->
+                <!--status=#{status},-->
+            <!--</if>-->
+        <!--</trim>-->
+          set status=#{status}
+        where id=#{id,jdbcType=VARCHAR}
+    </update>
+    <!--User queryOne(int id);-->
+    <select id="queryOne" parameterType="String" resultType="User">
+        <include refid="all"/>where id=#{id}
+    </select>
+    <!--//添加用户-->
+    <!--void insert(User user);-->
+    <insert id="insert" parameterType="User">
+        insert into yx_user values(#{id},#{username},#{phone},#{headimg},#{brief},#{wechat},#{createdate},#{status},#{sex})
+    </insert>
+    <!--//删除用户-->
+    <!--void delete(String id);-->
+    <delete id="delete" parameterType="String">
+        delete from yx_user where id=#{id}
+    </delete>
+    <!--//查所有-->
+    <!--List<User> queryAll();-->
+    <select id="queryAll" resultType="User">
+        <include refid="all"/>
+    </select>
+    <!--//查询每个月男女注册人数-->
+    <!--List<MonthAndSex> selectByMonth(String sex);-->
+    <select id="selectByMonth" parameterType="String" resultType="cn.baizhi.vo.MonthAndSex">
+        select month(createdate) months,count(*) sexCount from yx_user where sex=#{sex} group by month(createdate)
+    </select>
+</mapper>
